@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="col-12">
+    <table class="table table-striped text-center">
+        <thead>
+            <tr>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Start Date
+                </th>
+                <th>
+                    End Date
+                </th>
+                <th>
+                    Project
+                </th>
+                <th>
+                    Assigned Users
+                </th>
+                <th>
+                    Assigned Groups
+                </th>
+                <th>
+                    Created By
+                </th>
+                <th>
+                    Updated By
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for task in tasks %}
+                <tr>
+                    <td>
+                        {{ task.name }}
+                    </td>
+                    <td>
+                        {{ task.start|date:'d-m-Y' }}
+                    </td>
+                    <td>
+                        {{ task.end|date:'d-m-Y' }}
+                    </td>
+                    <td>
+                        {{ task.project.name }}
+                    </td>
+                    <td>
+                        {% for u in task.assigned_users.all %}
+                            <span>
+                                {{ u.username }}
+                            </span>
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for g in task.assigned_groups.all %}
+                        <span>
+                            {{ g.name }}
+                        </span>
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {{ task.created_by.username }}
+                        {{ task.created }}
+                    </td>
+                    <td>
+                        {{ task.updated_by }}
+                        {{ task.updated }}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock content %}

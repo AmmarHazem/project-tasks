@@ -1,0 +1,29 @@
+<!-- Modal -->
+<div class="modal fade" id="updateProjectModal{{ index }}" tabindex="-1" role="dialog" aria-labelledby="updateProjectModal{{ index }}" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="updateProjectModal{{ index }}">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                {% csrf_token %}
+                {% for f in form %}
+                    <div class="form-group">
+                        {{ f.label }}
+                        {{ f }}
+                        {% if f.errors %}
+                            {{ f.errors }}
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Update</button>
+            </div>
+        </div>
+    </div>
+</div>

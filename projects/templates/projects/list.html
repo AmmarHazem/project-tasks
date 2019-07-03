@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2 class="col-12 mt-2 text-center">
+        Projects
+    </h2>
+
+    <div class="col-12 mb-2">
+        <button type="button" class="btn btn-primary text-capitalize" data-toggle="modal" data-target="#addProjectModal">
+            add project
+        </button>
+        {% include 'projects/includes/add_project_modal.html' with form=project_form %}
+    </div>
+    <div class="col-12">
+        <form action="{% url 'projects:update' %}" method="POST">
+            {{ update_formset.management_form }}
+            {% for form in update_formset %}
+                {% include 'projects/includes/update_project_modal.html' with index=forloop.counter %}
+            {% endfor %}
+        </form>
+    </div>
+    <div class="col-12">
+        <table class="table table-striped text-center">
+            <thead>
+                <tr>
+                    <th>
+                        Details
+                    </th>
+                    <th>
+                        Edit
+                    </th>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Start Date
+                    </th>
+                    <th>
+                        End Date
+                    </th>
+                    <th>
+                        Progress
+                    </th>
+                    <th>
+                        Created By
+                    </th>
+                    <th>
+                        Updated By
+                    </th>
+                    <th>
+                        Updated
+                    </th>
+                    <th>
+                        Created
+                    </th>
+                    <th>
+                        Delete
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in projects %}
+                    <tr>
+                        <td>
+                            <button class="details btn btn-primary">
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                        </td>
+                        <td>
+                            <button class="btn">
+                                
+                            </button>
+                            <button type="button" class="btn btn-primary text-capitalize" data-toggle="modal" data-target="#updateProjectModal{{ forloop.counter }}">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </td>
+                        <td>
+                            {{ p.name }}
+                        </td>
+                        <td>
+                            {{ p.start|date:'d-m-Y' }}
+                        </td>
+                        <td>
+                            {{ p.end|date:'d-m-Y' }}
+                        </td>
+                        <td>
+                            {{ p.progress }}
+                        </td>
+                        <td>
+                            {{ p.created_by.username }}
+                        </td>
+                        <td>
+                            {{ p.updated_by.username }}
+                        </td>
+                        <td>
+                            {{ p.updated }}
+                        </td>
+                        <td>
+                            {{ p.created|date:'d-m-Y' }}
+                        </td>
+                        <td>
+                            <button type="button" class="btn text-danger" data-toggle="modal" data-target="#deleteProjectModal{{ p.id }}">
+                                <i class="fas fa-trash fa-2x"></i>
+                            </button>
+                            {% include 'projects/includes/delete_project_modal.html' with p=p %}
+                        </td>
+                    </tr>
+                    <tr class="details-row d-none">
+                        <td>
+                            Assigned Users
+                        </td>
+                        <td colspan="7">
+                            <ul>
+                            {% for u in p.assigned_users.all %}
+                                <li>
+                                    {{ u.username }}
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                        <td>
+                            Assigned groups
+                        </td>
+                        <td colspan="2">
+                            <ul>
+                                {% for g in p.assigned_groups.all %}
+                                    <li>
+                                        {{ g.name }}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock content %}
