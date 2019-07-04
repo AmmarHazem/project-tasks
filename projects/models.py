@@ -1,7 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import Group
-
+from django.urls import reverse_lazy
 
 class Project(models.Model):
     name = models.CharField(max_length = 250)
@@ -40,6 +40,9 @@ class Project(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse_lazy('projects:details', kwargs = {'pk' : self.id})
 
     class Meta:
         ordering = ('-created', 'name')

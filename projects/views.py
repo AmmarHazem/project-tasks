@@ -7,6 +7,20 @@ from django.contrib import messages
 
 from .forms import ProjectForm, ProjectInlineFormset
 from .models import Project
+from tasks.forms import TaskForm
+
+
+class ProjectDetails(PermissionRequiredMixin, UpdateView):
+    model = Project
+    template_name = 'projects/details.html'
+    context_object_name = 'project'
+    permission_required = ('projects.change_projects',)
+    form_class = ProjectForm
+
+    def get_context_data(self, *args, **kwargs):
+        cxt = super(ProjectDetails, self).get_context_data(*args, **kwargs)
+        cxt['task_form'] = TaskForm
+        return cxt
 
 
 class ProjectListView(PermissionRequiredMixin, ListView):
@@ -34,7 +48,6 @@ class ProjectCreate(PermissionRequiredMixin, CreateView):
     permission_required = ('projects.add_project',)
     model = Project
     form_class = ProjectForm
-    success_url = reverse_lazy('project_list')
     template_name = 'projects/list.html'
 
     def form_valid(self, form):
@@ -44,7 +57,7 @@ class ProjectCreate(PermissionRequiredMixin, CreateView):
         obj.save()
         form.save_m2m()
         messages.success(self.request, f'Project {obj.name} created')
-        return redirect(self.success_url)
+        return redirect(reverse_lazy('projects:details', kwargs = {'pk' : obj.id}))
 
     def form_invalid(self, form):
         cxt = self.get_context_data()

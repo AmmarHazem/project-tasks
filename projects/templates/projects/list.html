@@ -60,22 +60,21 @@
             </thead>
             <tbody>
                 {% for p in projects %}
-                    <tr>
+                    <tr data-id="{{ p.id }}">
                         <td>
                             <button class="details btn btn-primary">
                                 <i class="fas fa-chevron-down"></i>
                             </button>
                         </td>
                         <td>
-                            <button class="btn">
-                                
-                            </button>
                             <button type="button" class="btn btn-primary text-capitalize" data-toggle="modal" data-target="#updateProjectModal{{ forloop.counter }}">
                                 <i class="fas fa-edit"></i>
                             </button>
                         </td>
                         <td>
-                            {{ p.name }}
+                            <a href="{{ p.get_absolute_url }}">
+                                {{ p.name }}
+                            </a>
                         </td>
                         <td>
                             {{ p.start|date:'d-m-Y' }}
@@ -105,7 +104,7 @@
                             {% include 'projects/includes/delete_project_modal.html' with p=p %}
                         </td>
                     </tr>
-                    <tr class="details-row d-none">
+                    <tr class="details-row details-row-{{ p.id }} d-none">
                         <td>
                             Assigned Users
                         </td>

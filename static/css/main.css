@@ -9,4 +9,10 @@
   margin-bottom: 0px;
   margin-top: 0.5rem;
 }
+
+.project-details .card-footer {
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
 /*# sourceMappingURL=main.css.map */

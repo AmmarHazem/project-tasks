@@ -18,6 +18,8 @@ class ProjectForm(forms.ModelForm):
         self.fields['end'].widget.attrs['class'] += ' date-selector'
         self.fields['end'].widget.attrs['placeholder'] = 'YYYY-MM-DD'
         self.fields['start'].widget.attrs['placeholder'] = 'YYYY-MM-DD'
+        self.fields['start'].widget.attrs['id'] = 'id_task_start'
+        self.fields['end'].widget.attrs['id'] = 'id_task_end'
 
     class Meta:
         model = Project

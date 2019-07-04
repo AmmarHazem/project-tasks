@@ -9,12 +9,15 @@ $(document).ready(function() {
     $('table .details').on('click', function(){
 
         let table = $(this).parents('table');
-        let detailsRow = table.find('.details-row');
+        let rowId = $(this).parents('tr').attr('data-id');
+        let detailsRow = table.find(`.details-row-${rowId}`);
+
+
         if(detailsRow.hasClass('d-none')){
-            detailsRow.removeClass('d-none')
+            detailsRow.removeClass('d-none');
         }
         else{
-            detailsRow.addClass('d-none')
+            detailsRow.addClass('d-none');
         }
     });
 });

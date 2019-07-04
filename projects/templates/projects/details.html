@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+    <div class="col-8 mx-auto project-details">
+        <div class="card shadow mt-5">
+            <form method="POST">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        Project: <strong>{{ project.name }}</strong>
+                    </h5>
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <div class="form-group">
+                            {{ field.label }}
+                            {{ field }}
+                            {{ field.errors }}
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="card-footer d-flex">
+                    <button type="submit" class="btn btn-outline-primary">
+                        Submit
+                    </button>
+                    <a href="{% url 'project_list' %}" class="btn btn-secondary">
+                        Go back to project list
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-12 my-5">
+        {% include "tasks/includes/add_task_modal.html" %}
+        <button class="btn btn-outline-primary mb-3" data-toggle="modal" data-target="#addTaskModal">
+            Add Task
+        </button>
+        <table class="table table-striped text-center">
+            <thead>
+                <tr>
+                    <th>
+                        Details
+                    </th>
+                    <th>
+                        Edit
+                    </th>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Start Date
+                    </th>
+                    <th>
+                        End Date
+                    </th>
+                    <th>
+                        Created By
+                    </th>
+                    <th>
+                        Updated
+                    </th>
+                    <th>
+                        Delete
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for task in project.tasks.all %}
+                    {% include "tasks/includes/delete_task_modal.html" %}
+                    <tr data-id="{{ task.id }}">
+                        <td>
+                            <button class="details btn btn-primary">
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                        </td>
+                        <td>
+                            <button class="btn btn-primary">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </td>
+                        <td>
+                            {{ task.name }}
+                        </td>
+                        <td>
+                            {{ task.start|date:'d-m-Y' }}
+                        </td>
+                        <td>
+                            {{ task.end|date:'d-m-Y' }}
+                        </td>
+                        <td>
+                            {{ task.created_by|default:'' }}
+                            {{ task.created|date:'d-m-Y' }}
+                        </td>
+                        <td>
+                            {{ task.updated_by|default:'' }}
+                            {{ task.updated|date:'d-m-Y' }}
+                        </td>
+                        <td>
+                            <button class="btn btn-danger" data-toggle="modal" data-target="#deleteTaskModal{{ task.id }}">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr class="details-row details-row-{{ task.id }} d-none">
+                        <td>
+                            Assigned Users
+                            <ul>
+                                {% for u in task.assigned_users.all %}
+                                    <li>
+                                        {{ u.username }}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                        <td>
+                            Assigned Groups
+                            <ul>
+                                {% for g in task.assigned_groups.all %}
+                                    <li>
+                                        {{ g.name }}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                        <td colspan="8">
+                            {{ task.note }}
+                        </td>
+                    </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7">
+                        No Tasks Added yet.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock content %}
