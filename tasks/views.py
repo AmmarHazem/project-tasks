@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, CreateView, DeleteView, UpdateView
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.urls import reverse_lazy
 from django.contrib import messages
 
@@ -54,7 +55,7 @@ class CreateTask(CreateView):
         return redirect('projects:details', pk = obj.project.id)
 
 
-class ListTask(ListView):
+class ListTask(LoginRequiredMixin, ListView):
     template_name = 'tasks/list.html'
     context_object_name = 'tasks'
 
